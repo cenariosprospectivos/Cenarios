@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Geração de Cenários | MD 2036</title>
+  <meta name="description" content="Ferramenta pedagógica para geração e cruzamento de cenários a partir dos eventos prospectivos da Pesquisa MD 2036.">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="Geração de Cenários">
+  <meta property="og:title" content="Geração de Cenários | MD 2036">
+  <meta property="og:description" content="Transforma eventos isolados em combinações possíveis de futuro, com ranking de cenários e simulador manual.">
+  <meta property="og:url" content="https://cenariosprospectivos.github.io/Cenarios/">
+  <meta property="og:image" content="https://cenariosprospectivos.github.io/Cenarios/assets/share/cenarios-share.jpg">
+  <meta property="og:image:secure_url" content="https://cenariosprospectivos.github.io/Cenarios/assets/share/cenarios-share.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="hero">
+    <div>
+      <p class="kicker">Geração e cruzamento de cenários</p>
+      <h1>Cenários MD 2036</h1>
+      <p class="lead">Esta etapa transforma eventos isolados em combinações possíveis de futuro.</p>
+    </div>
+    <nav class="hero-actions">
+      <a href="https://cenariosprospectivos.github.io/Delphi/resultados.html" target="_blank" rel="noopener">Resultados Delphi</a>
+      <a href="https://cenariosprospectivos.github.io/Motricidade/" target="_blank" rel="noopener">Motricidade</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="explain-grid">
+      <article class="explain-card"><strong>1. O que é cenário?</strong><p>É uma combinação coerente de eventos que podem ocorrer ou não ocorrer ao mesmo tempo.</p></article>
+      <article class="explain-card"><strong>2. O que o sistema calcula?</strong><p>Ele cruza as probabilidades dos eventos e estima quais combinações têm maior probabilidade relativa.</p></article>
+      <article class="explain-card"><strong>3. Como interpretar?</strong><p>O cenário mais provável não é necessariamente o mais perigoso; ele é apenas a combinação mais provável pelos dados disponíveis.</p></article>
+    </section>
+
+    <section class="metric-grid">
+      <article class="metric-card"><span>Eventos considerados</span><strong id="metricEventos">0</strong><small>Eventos ativos importados da Pesquisa MD 2036.</small></article>
+      <article class="metric-card"><span>Cenários possíveis</span><strong id="metricCenarios">0</strong><small>Combinações automáticas de ocorrência e não ocorrência.</small></article>
+      <article class="metric-card priority-card"><span>Cenário mais provável</span><strong id="metricTopScenario">-</strong><small id="metricTopScenarioText">Aguardando cálculo dos cenários.</small></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <div><span class="section-number">01</span><h2>Ranking automático de cenários</h2><p class="section-lead">Cada linha combina eventos que ocorrem e não ocorrem. O cálculo usa as probabilidades-base vindas do Delphi.</p></div>
+        <div class="button-row"><button id="reloadBtn" type="button" class="ghost-btn">Recarregar</button><button id="exportJsonBtn" type="button" class="ghost-btn">Exportar JSON</button><button id="exportCsvBtn" type="button" class="ghost-btn">Exportar CSV</button></div>
+      </div>
+      <div id="statusBox" class="status">Carregando dados...</div>
+      <div class="chart-grid">
+        <article class="chart-card large"><h3>Cenários mais prováveis</h3><canvas id="rankingChart"></canvas><p class="chart-note">Mostra as combinações com maior probabilidade estimada. A probabilidade do cenário é calculada multiplicando as probabilidades de ocorrência e não ocorrência dos eventos.</p></article>
+        <article class="chart-card"><h3>Frequência dos eventos nos cenários prioritários</h3><canvas id="frequencyChart"></canvas><p class="chart-note">Indica quais eventos aparecem com mais frequência como “ocorre” entre os cenários mais prováveis.</p></article>
+      </div>
+      <div class="table-wrap"><table><thead id="autoTableHead"></thead><tbody id="autoTableBody"></tbody></table></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header">
+        <div><span class="section-number">02</span><h2>Simulador manual de cenário</h2><p class="section-lead">Use esta área para testar uma hipótese específica: escolha quais eventos ocorrem e veja a probabilidade estimada dessa combinação.</p></div>
+        <div class="button-row"><button id="calcManualBtn" type="button">Calcular cenário</button><button id="saveManualBtn" type="button" class="ghost-btn">Salvar cenário</button></div>
+      </div>
+      <article class="manual-result"><div><span>Probabilidade estimada</span><strong id="manualProbability">-</strong></div><p id="manualInterpretation">O exemplo pré-preenchido mostra uma crise limitada, com eventos de segurança e infraestrutura ocorrendo sem paralisia estratégica completa.</p></article>
+      <div class="manual-grid" id="manualControls"></div>
+      <div class="manual-form"><label>Nome do cenário<input id="manualScenarioName" type="text" value="Cenário simulado pelo usuário" /></label><label>Descrição<textarea id="manualScenarioDescription" rows="3">Cenário criado a partir da seleção manual de ocorrência e não ocorrência dos eventos.</textarea></label></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header"><div><span class="section-number">03</span><h2>Cenários salvos para o storytelling</h2><p class="section-lead">Estes exemplos ficam pré-preenchidos para que o usuário entenda a lógica da atividade mesmo sem editar os dados.</p></div></div>
+      <div class="saved-grid" id="savedScenarios"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-header"><div><span class="section-number">04</span><h2>Eventos usados no cálculo</h2><p class="section-lead">As probabilidades-base vêm da média das respostas Delphi. Quando não houver respostas, o sistema usa 50% como valor neutro.</p></div></div>
+      <div class="table-wrap"><table><thead><tr><th>Nº</th><th>Evento</th><th>Probabilidade-base</th><th>Importância média</th><th>Origem</th></tr></thead><tbody id="eventsTableBody"></tbody></table></div>
+    </section>
+  </main>
+
+  <footer class="footer"><p>Ferramenta conectada ao Supabase da Pesquisa MD 2036. Os cenários são estimativas pedagógicas baseadas nas probabilidades disponíveis.</p></footer>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/supabase-config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
